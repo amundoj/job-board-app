@@ -1,13 +1,20 @@
 const express = require('express');
+const dotenv = require('dotenv');
+const jobRoutes = require('./routes/jobRoutes');
+
+// Load environment variables
+dotenv.config();
+
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
-// Simple route
-app.get('/', (req, res) => {
-    res.send('Job Board API is running');
-});
+// Middleware
+app.use(express.json());
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Use job routes
+app.use('/api', jobRoutes);
+
+// Start server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
