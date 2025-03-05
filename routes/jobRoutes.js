@@ -3,9 +3,30 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const db = require('../db');
 
-// Get all jobs
+// Get all jobs with filters
 router.get('/jobs', auth, (req, res) => {
-  db.query('SELECT * FROM jobs', (err, results) => {
+  const { search, location, category, job_type } = req.query;
+  let query = 'SELECT * FROM jobs WHERE 1=1';
+  const params = [];
+
+  if (search) {
+    query += ' AND (title LIKE ? OR description LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  if (location) {
+    query += ' AND location = ?';
+    params.push(location);
+  }
+  if (category) {
+    query += ' AND category = ?';
+    params.push(category);
+  }
+  if (job_type) {
+    query += ' AND job_type = ?';
+    params.push(job_type);
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       console.error('DB Error:', err);
       return res.status(500).json({ msg: 'Database error' });
@@ -16,10 +37,19 @@ router.get('/jobs', auth, (req, res) => {
 
 // Post a job
 router.post('/jobs', auth, (req, res) => {
-  console.log('POST /api/jobs hit'); // Debug log
-  const { title, description } = req.body;
+  console.log('POST /api/jobs hit');
+  const { title, description, location, category, job_type, company_name, salary_range } = req.body;
   const userId = req.user.id;
-  const job = { title, description, user_id: userId };
+  const job = { 
+    title, 
+    description, 
+    user_id: userId, 
+    location, 
+    category, 
+    job_type, 
+    company_name, 
+    salary_range 
+  };
 
   db.query('INSERT INTO jobs SET ?', job, (err, result) => {
     if (err) {
