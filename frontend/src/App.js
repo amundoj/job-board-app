@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Register from './components/Register';
+import Login from './components/Login';
+import Jobs from './components/Jobs';
+import PostJob from './components/PostJob';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Job Board</h1>
+      <Register />
+      <Login />
+      <PostJob />
+      <Jobs />
     </div>
   );
-}
+};
 
 export default App;
