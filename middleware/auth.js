@@ -8,12 +8,12 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'mySecretKey123'); // Hardcoded secret
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
     next();
   } catch (err) {
     console.log('Token:', token);
-    console.log('JWT_SECRET:', 'mySecretKey123');
+    console.log('JWT_SECRET:', process.env.JWT_SECRET);
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
