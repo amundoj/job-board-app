@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getJobs } = require('../controllers/jobController');
+const auth = require('../middleware/auth');
 
 // Route to get all jobs
-router.get('/jobs', getJobs);
+router.get('/jobs', auth, (req, res) => {
+  res.json({ message: 'Jobs fetched successfully', jobs: [] });
+});
 
 module.exports = router;
