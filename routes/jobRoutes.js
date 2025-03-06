@@ -38,7 +38,7 @@ router.get('/jobs', auth, (req, res) => {
 // Post a job
 router.post('/jobs', auth, (req, res) => {
   console.log('POST /api/jobs hit');
-  const { title, description, location, category, job_type, company_name, salary_range } = req.body;
+  const { title, description, location, category, job_type, company_name } = req.body; // Removed salary_range
   const userId = req.user.id;
   const job = { 
     title, 
@@ -47,8 +47,7 @@ router.post('/jobs', auth, (req, res) => {
     location, 
     category, 
     job_type, 
-    company_name, 
-    salary_range 
+    company_name 
   };
 
   db.query('INSERT INTO jobs SET ?', job, (err, result) => {
