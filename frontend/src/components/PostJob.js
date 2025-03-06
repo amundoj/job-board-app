@@ -8,8 +8,7 @@ const PostJob = () => {
     location: '',
     category: '',
     job_type: '',
-    company_name: '',
-    salary_range: ''
+    company_name: ''
   });
   const [message, setMessage] = useState('');
 
@@ -47,7 +46,6 @@ const PostJob = () => {
           <option value="Part-time">Part-time</option>
         </select>
         <input type="text" name="company_name" placeholder="Company Name" onChange={handleChange} />
-        <input type="text" name="salary_range" placeholder="Salary Range (e.g., 500k-600k NOK)" onChange={handleChange} />
         <button type="submit">Post Job</button>
       </form>
       {message && <p>{message}</p>}
