@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
 
@@ -13,6 +13,7 @@ const Login = () => {
       const res = await axios.post('http://localhost:5000/api/auth/login', formData);
       setMessage('Login successful! Token: ' + res.data.token);
       localStorage.setItem('token', res.data.token);
+      setIsLoggedIn(true);
     } catch (err) {
       setMessage(err.response?.data.msg || 'Login failed');
       console.error('Login error:', err.response?.data);
