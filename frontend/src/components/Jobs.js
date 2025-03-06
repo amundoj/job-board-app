@@ -36,7 +36,7 @@ const Jobs = () => {
   return (
     <div>
       <h2>Job Listings</h2>
-      <div>
+      <div className="filter-section">
         <input
           type="text"
           name="search"
@@ -49,7 +49,7 @@ const Jobs = () => {
           name="location"
           placeholder="Location (e.g., Oslo)"
           value={filters.location}
-          onChange={handleFilterChange}
+          onChange={handleFilterChange} // Fixed from handleChange
         />
         <select name="category" value={filters.category} onChange={handleFilterChange}>
           <option value="">All Categories</option>
@@ -63,15 +63,17 @@ const Jobs = () => {
           <option value="Part-time">Part-time</option>
         </select>
       </div>
-      {error && <p>{error}</p>}
+      {error && <p style={{ color: '#e53e3e' }}>{error}</p>}
       <ul>
         {jobs.length > 0 ? (
           jobs.map((job) => (
             <li key={job.id}>
               <strong>{job.title}</strong> - {job.company_name} ({job.location})<br />
-              {job.description}<br />
-              Type: {job.job_type} | Salary: {job.salary_range || 'Not specified'}<br />
-              Posted: {new Date(job.posted_at).toLocaleDateString()}
+              <p>{job.description}</p>
+              <small>
+                Type: {job.job_type} | Salary: {job.salary_range || 'Not specified'}<br />
+                Posted: {new Date(job.posted_at).toLocaleDateString('no-NO')}
+              </small>
             </li>
           ))
         ) : (
