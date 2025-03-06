@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Jobs = () => {
@@ -49,7 +50,7 @@ const Jobs = () => {
           name="location"
           placeholder="Location (e.g., Oslo)"
           value={filters.location}
-          onChange={handleFilterChange} // Fixed from handleChange
+          onChange={handleFilterChange}
         />
         <select name="category" value={filters.category} onChange={handleFilterChange}>
           <option value="">All Categories</option>
@@ -68,12 +69,11 @@ const Jobs = () => {
         {jobs.length > 0 ? (
           jobs.map((job) => (
             <li key={job.id}>
-              <strong>{job.title}</strong> - {job.company_name} ({job.location})<br />
-              <p>{job.description}</p>
-              <small>
-                Type: {job.job_type} | Salary: {job.salary_range || 'Not specified'}<br />
-                Posted: {new Date(job.posted_at).toLocaleDateString('no-NO')}
-              </small>
+              <Link to={`/job/${job.id}`} style={{ color: '#4FD1C5', textDecoration: 'none' }}>
+                <strong>{job.title}</strong>
+              </Link> - {job.company_name} ({job.location})<br />
+              <p>{job.description.substring(0, 100)}...</p> {/* Teaser */}
+              <small>Type: {job.job_type} | Posted: {new Date(job.posted_at).toLocaleDateString('no-NO')}</small>
             </li>
           ))
         ) : (
