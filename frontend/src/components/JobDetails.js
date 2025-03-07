@@ -6,6 +6,7 @@ const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -32,6 +33,18 @@ const JobDetails = () => {
     fetchJob();
   }, [id]);
 
+  const handleApply = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(`http://localhost:5000/api/jobs/${id}/apply`, {}, {
+        headers: { 'x-auth-token': token }
+      });
+      setMessage(res.data.msg);
+    } catch (err) {
+      setMessage(err.response?.data.msg || 'Failed to apply');
+    }
+  };
+
   if (!job && !error) return <p>Loading...</p>;
   if (error) return <p style={{ color: '#e53e3e' }}>{error}</p>;
 
@@ -43,6 +56,8 @@ const JobDetails = () => {
       <p><strong>Type:</strong> {job.job_type}</p>
       <p><strong>Description:</strong> {job.description}</p>
       <p><strong>Posted:</strong> {new Date(job.posted_at).toLocaleDateString('no-NO')}</p>
+      <button onClick={handleApply} style={{ marginTop: '20px' }}>Apply Now</button>
+      {message && <p>{message}</p>}
     </div>
   );
 };

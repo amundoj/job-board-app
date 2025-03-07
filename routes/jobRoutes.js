@@ -38,7 +38,7 @@ router.get('/jobs', auth, (req, res) => {
 // Post a job
 router.post('/jobs', auth, (req, res) => {
   console.log('POST /api/jobs hit');
-  const { title, description, location, category, job_type, company_name } = req.body; // Removed salary_range
+  const { title, description, location, category, job_type, company_name } = req.body;
   const userId = req.user.id;
   const job = { 
     title, 
@@ -56,6 +56,32 @@ router.post('/jobs', auth, (req, res) => {
       return res.status(500).json({ msg: 'Error posting job' });
     }
     res.status(201).json({ msg: 'Job posted', jobId: result.insertId });
+  });
+});
+
+// Apply to a job
+router.post('/jobs/:id/apply', auth, (req, res) => {
+  const jobId = req.params.id;
+  const userId = req.user.id;
+
+  // Check if user already applied
+  db.query('SELECT * FROM applications WHERE job_id = ? AND user_id = ?', [jobId, userId], (err, results) => {
+    if (err) {
+      console.error('DB Error:', err);
+      return res.status(500).json({ msg: 'Database error' });
+    }
+    if (results.length > 0) {
+      return res.status(400).json({ msg: 'You have already applied to this job' });
+    }
+
+    const application = { job_id: jobId, user_id: userId };
+    db.query('INSERT INTO applications SET ?', application, (err, result) => {
+      if (err) {
+        console.error('DB Error:', err);
+        return res.status(500).json({ msg: 'Error applying to job' });
+      }
+      res.status(201).json({ msg: 'Application submitted', applicationId: result.insertId });
+    });
   });
 });
 
